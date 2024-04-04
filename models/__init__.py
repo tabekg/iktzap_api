@@ -3,10 +3,15 @@ from sqlalchemy import event as sa_event, func, Column, String, Text, DateTime
 # DO NOT REMOVE THIS UNUSED IMPORT
 from utils.database import Base
 
-from . import user
+from . import user, category
 
 
 @sa_event.listens_for(user.User, 'before_update')
+def update_version(mapper, connection, target):
+    target.updated_at = func.now()
+
+
+@sa_event.listens_for(category.Category, 'before_update')
 def update_version(mapper, connection, target):
     target.updated_at = func.now()
 
