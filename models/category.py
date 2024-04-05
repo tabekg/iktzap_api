@@ -11,4 +11,4 @@ class Category(Base):
     parent_id = Column(Integer, ForeignKey('categories.id'), nullable=True)
     image_path = Column(String(255), nullable=True)
 
-    user = relationship('User', foreign_keys=[parent_id])
+    parent = relationship('Category', foreign_keys=[parent_id])
