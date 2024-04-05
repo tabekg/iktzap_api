@@ -13,3 +13,5 @@ PORT = config.get('system', 'port')
 SECRET_KEY = config.get('system', 'secret_key')
 ACCESS_TOKEN_EXPIRE_DAYS = 90
 STORAGE_PATH = config.get('system', 'storage_path')
+
+ITEMS_ON_PER_PAGE = 30
