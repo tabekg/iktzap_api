@@ -1,11 +1,13 @@
+import json
+
 from flask import Blueprint, g, request
 
 from models.category import Category
-from utils.exceptions import ResponseException
+from utils.config import IMAGE_FILE_FORMATS
+from utils.exceptions import ResponseException, NotFoundException, AlreadyExistsException
 from utils import make_response, orm_list_with_pages
-from controllers.auth import create_access_token, check_password
-from models.user import User
 from utils import orm_to_dict
+from utils.storage import allowed_file, save_file
 
 bp = Blueprint('category', __name__, url_prefix='/category')
 
@@ -42,23 +44,38 @@ def index_get():
 
 @bp.post('')
 def index_post():
-    phone_number = request.json['phone_number']
-    password = request.json['password']
+    form = json.loads(request.form['_json'])
 
-    user = g.db.query(User).filter(
-        User.phone_number == phone_number,
-        User.provider_name == 'phone_number',
-    ).one()
+    title = form['title']
+    parent_id = form['parent_id'] or None
+    image_file = request.files.get('image_file')
 
-    if check_password(password, user.encrypted_password) is False:
-        raise ResponseException(status='wrong_password', status_code=400)
+    parent = None
+    image_path = None
 
-    return make_response({
-        'user': orm_to_dict(
-            user,
-            [
-                'phone_number', 'full_name', 'role'
-            ],
-        ),
-        'token': create_access_token({'phone_number': user.phone_number}),
-    })
+    if parent_id:
+        parent = g.db.query(Category).filter(
+            Category.parent_id == parent_id
+        ).first()
+
+        if not parent:
+            raise NotFoundException(payload={'code': 'parent_category_not_found'})
+
+    if g.db.query(Category).filter(Category.title == title).first() is not None:
+        raise AlreadyExistsException(payload={'code': 'title_already_exists'})
+
+    if image_file:
+        if image_file and allowed_file(image_file.filename, allowed_extensions=IMAGE_FILE_FORMATS):
+            image_path = save_file(image_file, 'images')
+        else:
+            raise ResponseException(status='unsupported_image')
+
+    item = Category(
+        title=title,
+        image_path=image_path or None,
+        parent_id=parent.id if parent else None,
+    )
+    g.db.add(item)
+    g.db.commit()
+
+    return make_response(status_code=201)

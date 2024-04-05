@@ -17,3 +17,13 @@ class ResponseException(Exception):
 class AccessDeniedException(ResponseException):
     status = 'access_denied'
     status_code = 403
+
+
+class NotFoundException(ResponseException):
+    status = 'not_found'
+    status_code = 404
+
+
+class AlreadyExistsException(ResponseException):
+    status = 'already_exists'
+    status_code = 409
