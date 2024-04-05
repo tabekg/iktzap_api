@@ -28,13 +28,8 @@ def index_get():
             render=lambda c: orm_to_dict(
                 c.all(),
                 [
-                    'title', 'image_path',
-                ],
-                {
-                    'children': lambda a: orm_to_dict(a.children, [
-                        'title', 'image_path'
-                    ]),
-                }
+                    'title', 'image_path', 'parent_id',
+                ]
             ),
             query=items,
             page=request.args.get('_page')
@@ -80,8 +75,7 @@ def index_post():
 
     return make_response(
         payload=orm_to_dict(
-            item, ['title', 'image_path'],
-            {'children': lambda a: orm_to_dict(a.children, ['title', 'image_path'])},
+            item, ['title', 'image_path', 'parent_id'],
         ),
         status_code=201,
     )
