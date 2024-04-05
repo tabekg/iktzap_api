@@ -12,4 +12,4 @@ class Category(Base):
     image_path = Column(String(255), nullable=True)
 
     parent = relationship('Category', foreign_keys=[parent_id], back_populates='children')
-    children = relationship(back_populates="parent")
+    children = relationship('Category', back_populates="parent")
