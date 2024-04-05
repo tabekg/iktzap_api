@@ -31,7 +31,7 @@ def index_get():
                     'title', 'image_path',
                 ],
                 {
-                    'parent': lambda a: orm_to_dict(a.parent, [
+                    'children': lambda a: orm_to_dict(a.children, [
                         'title', 'image_path'
                     ]),
                 }
@@ -55,7 +55,7 @@ def index_post():
 
     if parent_id:
         parent = g.db.query(Category).filter(
-            Category.id == parent_id
+            Category.parent_id == parent_id
         ).first()
 
         if not parent:
@@ -81,7 +81,7 @@ def index_post():
     return make_response(
         payload=orm_to_dict(
             item, ['title', 'image_path'],
-            {'parent': lambda a: orm_to_dict(a.parent, ['title', 'image_path'])},
+            {'children': lambda a: orm_to_dict(a.children, ['title', 'image_path'])},
         ),
         status_code=201,
     )
