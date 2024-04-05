@@ -50,7 +50,7 @@ def index_post():
 
     if parent_id:
         parent = g.db.query(Category).filter(
-            Category.parent_id == parent_id
+            Category.id == parent_id
         ).first()
 
         if not parent:
