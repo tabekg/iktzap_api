@@ -78,4 +78,10 @@ def index_post():
     g.db.add(item)
     g.db.commit()
 
-    return make_response(status_code=201)
+    return make_response(
+        payload=orm_to_dict(
+            item, ['title', 'image_path'],
+            {'parent': lambda a: orm_to_dict(a.parent, ['title', 'image_path'])},
+        ),
+        status_code=201,
+    )
