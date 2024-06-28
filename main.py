@@ -5,7 +5,6 @@ from flask import Flask, g, send_file
 from sqlalchemy.exc import NoResultFound, MultipleResultsFound
 
 from endpoints import v1
-from controllers.auth import check_auth_token
 from utils.config import STORAGE_PATH
 from utils.database import SessionLocal
 from utils.exceptions import ResponseException
@@ -18,7 +17,6 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def before_request():
     g.db = SessionLocal()
     g.user = None
-    check_auth_token()
 
 
 @app.after_request

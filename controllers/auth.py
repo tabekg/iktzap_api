@@ -27,8 +27,6 @@ def get_hashed_password(password):
 
 
 def check_auth_token():
-    if request.method == 'OPTIONS':
-        return
     token = request.headers['Authorization'][7:] if 'Authorization' in request.headers else None
     try:
         if not token:
@@ -42,7 +40,7 @@ def check_auth_token():
                 algorithms=["HS256"],
             )
             g.user = g.db.query(User) \
-                .filter_by(provider_id=data['phone_number'], provider_name='phone_number') \
+                .filter_by(provider_id=data['phone_number'], provider_name=None) \
                 .first()
             if g.user and g.user.is_disabled is True:
                 g.user = None
@@ -53,6 +51,7 @@ def check_auth_token():
 def check_user(roles=None):
     if request.method == 'OPTIONS':
         return
+    check_auth_token()
     if not hasattr(g, 'user') or not g.user:
         raise ResponseException(payload='User not authorized', status='not_authorized', status_code=401)
     if roles is not None and g.user.role not in roles:
