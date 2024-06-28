@@ -16,7 +16,7 @@ def index_post():
 
     user = g.db.query(User).filter(
         User.phone_number == phone_number,
-        User.provider_name == 'phone_number',
+        User.provider_name.is_(None),
     ).one()
 
     if check_password(password, user.encrypted_password) is False:
@@ -29,5 +29,5 @@ def index_post():
                 'phone_number', 'full_name', 'role'
             ],
         ),
-        'token': create_access_token({'phone_number': user.phone_number}),
+        'token': create_access_token({'phone_number': user.phone_number, 'id': user.id}),
     })
