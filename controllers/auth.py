@@ -40,7 +40,7 @@ def check_auth_token():
                 algorithms=["HS256"],
             )
             g.user = g.db.query(User) \
-                .filter_by(provider_id=data['phone_number'], provider_name=None) \
+                .filter_by(id=data['id'], provider_name=None) \
                 .first()
             if g.user and g.user.is_disabled is True:
                 g.user = None

@@ -29,5 +29,5 @@ def index_post():
                 'phone_number', 'full_name', 'role'
             ],
         ),
-        'token': create_access_token({'phone_number': user.phone_number, 'id': user.id}),
+        'token': create_access_token({'id': user.id}),
     })
