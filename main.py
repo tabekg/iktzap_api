@@ -67,6 +67,6 @@ app.register_blueprint(v1.bp)
 @app.route('/storage/images/<path:path>', methods=['GET'])
 def storage_images_get(path):
     try:
-        return send_file(os.path.join(STORAGE_PATH, 'images', path))
+        return send_file(str(os.path.join(STORAGE_PATH, 'images', path)))
     except Exception as e:
         return {'message': e.__str__()}, 500

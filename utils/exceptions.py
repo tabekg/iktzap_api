@@ -15,15 +15,30 @@ class ResponseException(Exception):
 
 
 class AccessDeniedException(ResponseException):
+
+    def __init__(self, payload=None, result=-1):
+        self.payload = payload
+        self.result = result
+
     status = 'access_denied'
     status_code = 403
 
 
 class NotFoundException(ResponseException):
+
+    def __init__(self, payload=None, result=-1):
+        self.payload = payload
+        self.result = result
+
     status = 'not_found'
     status_code = 404
 
 
 class AlreadyExistsException(ResponseException):
+
+    def __init__(self, payload=None, result=-1):
+        self.payload = payload
+        self.result = result
+
     status = 'already_exists'
     status_code = 409
