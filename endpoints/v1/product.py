@@ -31,7 +31,7 @@ def index_get():
                 c.all(),
                 [
                     'title', 'description', 'price',
-                    'image_path', 'in_stock',
+                    'image_path', 'quantity',
                     'category_id',
                 ]
             ),
@@ -48,11 +48,12 @@ def index_post():
     title = form['title']
     description = form['description']
     price = form['price']
-    in_stock = form['in_stock']
+    quantity = form['quantity']
     category_id = form['category_id']
     image_file = request.files.get('image_file')
 
     category = g.db.query(Category).filter(Category.id == category_id).one()
+    assert quantity >= 0
 
     image_path = None
 
@@ -70,7 +71,7 @@ def index_post():
         description=description,
         price=price,
         image_path=image_path or None,
-        in_stock=in_stock,
+        quantity=quantity,
         category_id=category.id,
     )
     g.db.add(item)
@@ -81,7 +82,7 @@ def index_post():
             item,
             [
                 'title', 'description', 'price',
-                'image_path', 'in_stock',
+                'image_path', 'quantity',
                 'category_id',
             ],
         ),
