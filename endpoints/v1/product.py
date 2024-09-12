@@ -15,13 +15,15 @@ bp = Blueprint('product', __name__, url_prefix='/product')
 
 @bp.get('')
 def index_get():
-    category_id = request.args['category_id']
+    category_id = request.args.get('category_id')
 
     items = g.db.query(Product)
 
-    category = g.db.query(Category).filter(Category.id == category_id).one()
+    if category_id:
+        category = g.db.query(Category).filter(Category.id == category_id).one()
+        items = items.filter(Product.category_id == category.id)
 
-    items = items.filter(Product.category_id == category.id)
+    items = items.order_by(Product.id.desc())
 
     return make_response(
         orm_list_with_pages(
