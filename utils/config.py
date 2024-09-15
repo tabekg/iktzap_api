@@ -15,5 +15,4 @@ ACCESS_TOKEN_EXPIRE_DAYS = 90
 STORAGE_PATH = config.get('system', 'storage_path')
 
 ITEMS_ON_PER_PAGE = 30
-
-IMAGE_FILE_FORMATS = {'png', 'jpg', 'jpeg', 'gif'}
+IMAGE_FILE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}

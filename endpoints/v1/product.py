@@ -4,7 +4,7 @@ from flask import Blueprint, g, request
 
 from models.category import Category
 from models.product import Product
-from utils.config import IMAGE_FILE_FORMATS
+from utils.config import IMAGE_FILE_EXTENSIONS
 from utils.exceptions import ResponseException, AlreadyExistsException
 from utils import make_response, orm_list_with_pages
 from utils import orm_to_dict
@@ -61,7 +61,7 @@ def index_post():
         raise AlreadyExistsException(payload={'code': 'title_already_exists'})
 
     if image_file:
-        if image_file and allowed_file(image_file.filename, allowed_extensions=IMAGE_FILE_FORMATS):
+        if image_file and allowed_file(image_file.filename, allowed_extensions=IMAGE_FILE_EXTENSIONS):
             image_path = save_file(image_file, 'images')
         else:
             raise ResponseException(status='unsupported_image')
