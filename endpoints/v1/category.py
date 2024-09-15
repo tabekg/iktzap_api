@@ -95,5 +95,5 @@ def index_post():
         payload=orm_to_dict(
             item, ['title', 'image_path', 'parent_id'],
         ),
-        status_code=204 if id_ else 201,
+        status_code=200 if id_ else 201,
     )
