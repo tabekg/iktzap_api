@@ -5,7 +5,7 @@ from datetime import datetime
 
 from werkzeug.utils import secure_filename
 
-from utils.config import STORAGE_PATH
+from utils.config import STORAGE_PATH, STORAGE_DIRECTORIES
 
 
 def allowed_file(filename, allowed_extensions=None):
@@ -19,8 +19,16 @@ def save_file(file, folder):
     letters = string.ascii_lowercase
     rand_string = ''.join(random.choice(letters) for i in range(4))
     filename = datetime.now().strftime("%Y%m%d%H%M%S") + '_' + rand_string + '_' + secure_filename(file.filename)
-    directory = os.path.join(STORAGE_PATH, folder, ym)
+    directory = str(os.path.join(STORAGE_PATH, folder, ym))
     if not os.path.exists(directory):
         os.makedirs(directory)
     file.save(os.path.join(directory, filename))
     return ym + '/' + filename
+
+
+def delete_file(file_path, folder):
+    if folder not in STORAGE_DIRECTORIES:
+        raise ValueError()
+    path = os.path.join(STORAGE_PATH, folder, file_path)
+    if os.path.exists(path):
+        os.remove(path)

@@ -13,6 +13,7 @@ PORT = config.get('system', 'port')
 SECRET_KEY = config.get('system', 'secret_key')
 ACCESS_TOKEN_EXPIRE_DAYS = 90
 STORAGE_PATH = config.get('system', 'storage_path')
+STORAGE_DIRECTORIES = ['images']
 
 ITEMS_ON_PER_PAGE = 30
 IMAGE_FILE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}

@@ -1,7 +1,7 @@
 import math
 
 from utils.exceptions import ResponseException
-from utils.config import SECRET_KEY, ITEMS_ON_PER_PAGE
+from utils.config import SECRET_KEY, ITEMS_ON_PER_PAGE, STORAGE_PATH, STORAGE_DIRECTORIES
 from utils.database import SessionLocal
 
 

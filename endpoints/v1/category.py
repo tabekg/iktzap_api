@@ -7,7 +7,7 @@ from utils.config import IMAGE_FILE_EXTENSIONS
 from utils.exceptions import ResponseException, NotFoundException, AlreadyExistsException
 from utils import make_response, orm_list_with_pages
 from utils import orm_to_dict
-from utils.storage import allowed_file, save_file
+from utils.storage import allowed_file, save_file, delete_file
 
 bp = Blueprint('category', __name__, url_prefix='/category')
 
@@ -72,6 +72,8 @@ def index_post():
     if image_file:
         if allowed_file(image_file.filename, allowed_extensions=IMAGE_FILE_EXTENSIONS):
             image_path = save_file(image_file, 'images')
+            if item and item.image_path:
+                delete_file(item.image_path, 'images')
         else:
             raise ResponseException(status='unsupported_image')
 
