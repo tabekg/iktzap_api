@@ -31,7 +31,7 @@ def index_get():
                     'title', 'image_path', 'parent_id',
                 ]
             ),
-            query=items,
+            query=items.order_by(Category.title.asc()),
             page=request.args.get('_page')
         ),
     )
