@@ -37,6 +37,22 @@ def index_get():
     )
 
 
+@bp.delete('')
+def index_delete():
+    id_ = request.args['id']
+
+    item = g.db.query(Category).filter(Category.id == id_).one()
+
+    assert g.db.query(Category).filter(Category.parent_id == item.id).count() == 0
+
+    if item.image_path:
+        delete_file(item.image_path, 'images')
+    g.db.delete(item)
+    g.db.commit()
+
+    return make_response()
+
+
 @bp.post('')
 def index_post():
     form = json.loads(request.form['_json'])
