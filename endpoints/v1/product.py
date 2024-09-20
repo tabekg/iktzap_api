@@ -8,7 +8,7 @@ from utils.config import IMAGE_FILE_EXTENSIONS
 from utils.exceptions import ResponseException, AlreadyExistsException
 from utils import make_response, orm_list_with_pages
 from utils import orm_to_dict
-from utils.storage import allowed_file, save_file
+from utils.storage import allowed_file, save_file, delete_file
 
 bp = Blueprint('product', __name__, url_prefix='/product')
 
@@ -39,6 +39,20 @@ def index_get():
             page=request.args.get('_page')
         ),
     )
+
+
+@bp.delete('')
+def index_delete():
+    id_ = request.args['id']
+
+    item = g.db.query(Product).filter(Product.id == id_).one()
+
+    if item.image_path:
+        delete_file(item.image_path, 'images')
+    g.db.delete(item)
+    g.db.commit()
+
+    return make_response()
 
 
 @bp.post('')
