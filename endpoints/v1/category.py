@@ -3,6 +3,7 @@ import json
 from flask import Blueprint, g, request
 
 from models.category import Category
+from models.product import Product
 from utils.config import IMAGE_FILE_EXTENSIONS
 from utils.exceptions import ResponseException, NotFoundException, AlreadyExistsException
 from utils import make_response, orm_list_with_pages
@@ -44,6 +45,7 @@ def index_delete():
     item = g.db.query(Category).filter(Category.id == id_).one()
 
     assert g.db.query(Category).filter(Category.parent_id == item.id).count() == 0
+    assert g.db.query(Product).filter(Product.category_id == item.id).count() == 0
 
     if item.image_path:
         delete_file(item.image_path, 'images')
