@@ -37,6 +37,23 @@ def index_get():
         ),
     )
 
+@bp.get('/all')
+def all_get():
+    items = g.db.query(Category)
+
+    return make_response(
+        orm_list_with_pages(
+            render=lambda c: orm_to_dict(
+                c.all(),
+                [
+                    'title', 'image_path', 'parent_id',
+                ]
+            ),
+            query=items.order_by(Category.title.asc()),
+            page=request.args.get('_page')
+        ),
+    )
+
 
 @bp.delete('')
 def index_delete():
