@@ -30,6 +30,7 @@ def index_get():
                 c.all(),
                 [
                     'title', 'image_path', 'parent_id',
+                    'updated_at',
                 ]
             ),
             query=items.order_by(Category.title.asc()),
@@ -47,6 +48,7 @@ def all_get():
                 c.all(),
                 [
                     'title', 'image_path', 'parent_id',
+                    'updated_at',
                 ]
             ),
             query=items.order_by(Category.title.asc()),
@@ -128,7 +130,7 @@ def index_post():
 
     return make_response(
         payload=orm_to_dict(
-            item, ['title', 'image_path', 'parent_id'],
+            item, ['title', 'image_path', 'parent_id', 'updated_at'],
         ),
         status_code=200 if id_ else 201,
     )

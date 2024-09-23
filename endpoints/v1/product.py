@@ -32,7 +32,8 @@ def index_get():
                 [
                     'title', 'description', 'price',
                     'image_path', 'quantity',
-                    'category_id',
+                    'category_id', 'updated_at',
+                    'article',
                 ]
             ),
             query=items,
@@ -65,6 +66,7 @@ def index_post():
     quantity = form['quantity']
     category_id = form['category_id']
     image_file = request.files.get('image_file')
+    article = form.get('article')
 
     category = g.db.query(Category).filter(Category.id == category_id).one()
     assert quantity >= 0
@@ -87,6 +89,7 @@ def index_post():
         image_path=image_path or None,
         quantity=quantity,
         category_id=category.id,
+        article=article,
     )
     g.db.add(item)
     g.db.commit()
@@ -97,7 +100,8 @@ def index_post():
             [
                 'title', 'description', 'price',
                 'image_path', 'quantity',
-                'category_id',
+                'category_id', 'updated_at',
+                'article',
             ],
         ),
         status_code=201,
