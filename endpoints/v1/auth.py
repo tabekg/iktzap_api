@@ -34,8 +34,8 @@ def index_post():
     })
 
 
-@auth_required()
 @bp.post('/password')
+@auth_required()
 def password_post():
     current = request.json['current']
     new = request.json['new']
