@@ -11,12 +11,12 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.post('')
 def index_post():
-    phone_number = request.json['phone_number']
+    login = request.json['login']
     password = request.json['password']
 
     user = g.db.query(User).filter(
-        User.phone_number == phone_number,
-        User.provider_name.is_(None),
+        User.provider_uid == login,
+        User.provider_name == 'login',
     ).one()
 
     if check_password(password, user.encrypted_password) is False:
