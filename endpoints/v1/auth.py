@@ -2,7 +2,7 @@ from flask import Blueprint, g, request
 
 from utils.exceptions import ResponseException
 from utils import make_response
-from controllers.auth import create_access_token, check_password
+from controllers.auth import create_access_token, check_password, auth_required, get_hashed_password
 from models.user import User
 from utils import orm_to_dict
 
@@ -32,3 +32,20 @@ def index_post():
         ),
         'token': create_access_token({'id': user.id}),
     })
+
+
+@auth_required()
+@bp.post('/password')
+def password_post():
+    current = request.json['current']
+    new = request.json['new']
+
+    assert 0 < len(new) < 20
+
+    if check_password(current, g.user.encrypted_password) is False:
+        raise ResponseException(status='wrong_password', status_code=400)
+
+    g.user.encrypted_password = get_hashed_password(new)
+    g.db.commit()
+
+    return make_response()
