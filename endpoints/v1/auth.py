@@ -26,6 +26,7 @@ def index_post():
         'user': orm_to_dict(
             user,
             [
+                'provider_name', 'provider_uid', 'provider_id',
                 'phone_number', 'full_name', 'role'
             ],
         ),
