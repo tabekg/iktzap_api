@@ -2,8 +2,10 @@ import json
 
 from flask import Blueprint, g, request
 
+from controllers.auth import auth_required
 from models.category import Category
 from models.product import Product
+from models.user import UserRoleEnum
 from utils.config import IMAGE_FILE_EXTENSIONS
 from utils.exceptions import ResponseException, NotFoundException, AlreadyExistsException
 from utils import make_response, orm_list_with_pages
@@ -57,6 +59,7 @@ def all_get():
     )
 
 
+@auth_required(UserRoleEnum.super_admin)
 @bp.delete('')
 def index_delete():
     id_ = request.args['id']
@@ -74,6 +77,7 @@ def index_delete():
     return make_response()
 
 
+@auth_required(UserRoleEnum.super_admin)
 @bp.post('')
 def index_post():
     form = json.loads(request.form['_json'])

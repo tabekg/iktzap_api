@@ -42,6 +42,7 @@ def index_get():
     )
 
 
+@auth_required(UserRoleEnum.super_admin)
 @bp.delete('')
 def index_delete():
     id_ = request.args['id']
@@ -56,6 +57,7 @@ def index_delete():
     return make_response()
 
 
+@auth_required(UserRoleEnum.super_admin)
 @bp.post('')
 def index_post():
     form = json.loads(request.form['_json'])
