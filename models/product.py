@@ -12,5 +12,6 @@ class Product(Base):
     image_path = Column(String(255), nullable=True)
     quantity = Column(Integer, nullable=False, default='0', server_default='0')
     article = Column(String(255), nullable=True)
+    code = Column(String(255), nullable=True)
 
     category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
