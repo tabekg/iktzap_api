@@ -16,4 +16,4 @@ STORAGE_PATH = config.get('system', 'storage_path')
 STORAGE_DIRECTORIES = ['images']
 
 ITEMS_ON_PER_PAGE = 30
-IMAGE_FILE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+IMAGE_FILE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'jfif', 'pdf', 'heic'}
