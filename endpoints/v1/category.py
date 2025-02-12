@@ -26,7 +26,7 @@ def index_get():
 
     if parent_id:
         items = items.filter(Category.parent_id == parent_id)
-    if id_:
+    elif id_:
         items = items.filter(Category.id == id_)
     else:
         items = items.filter(Category.parent_id.is_(None))
