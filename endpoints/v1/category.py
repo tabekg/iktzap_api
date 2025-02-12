@@ -18,13 +18,29 @@ bp = Blueprint('category', __name__, url_prefix='/category')
 @bp.get('')
 def index_get():
     parent_id = request.args.get('parent_id') or None
+    id_ = request.args.get('id') or None
+
+    assert id_ is None or parent_id is None
 
     items = g.db.query(Category)
 
     if parent_id:
         items = items.filter(Category.parent_id == parent_id)
+    if id_:
+        items = items.filter(Category.id == id_)
     else:
         items = items.filter(Category.parent_id.is_(None))
+
+    if id_:
+        return make_response(
+            orm_to_dict(
+                items.one(),
+                [
+                    'title', 'image_path', 'parent_id',
+                    'updated_at',
+                ]
+            )
+        )
 
     return make_response(
         orm_list_with_pages(
@@ -39,6 +55,7 @@ def index_get():
             page=request.args.get('_page')
         ),
     )
+
 
 @bp.get('/all')
 def all_get():
