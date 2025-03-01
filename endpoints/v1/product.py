@@ -3,6 +3,7 @@ import json
 from flask import Blueprint, g, request
 
 from controllers.auth import auth_required
+from controllers.product import import_json
 from models.category import Category
 from models.product import Product
 from models.user import UserRoleEnum
@@ -108,5 +109,22 @@ def index_post():
                 'article',
             ],
         ),
+        status_code=201,
+    )
+
+
+@bp.post('/import')
+@auth_required(UserRoleEnum.super_admin)
+def import_post():
+    form = json.loads(request.form['_json'])
+
+    products = form['products']
+
+    import_json(g.db, products)
+
+    g.db.commit()
+
+    return make_response(
+        payload=None,
         status_code=201,
     )
