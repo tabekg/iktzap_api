@@ -25,15 +25,26 @@ def import_json(db, data):
         kategori_b = create_category(db, item['KategoriB'], parent=kategori_a)
         kategori_c = create_category(db, item['KategoriC'], parent=kategori_b)
 
-        product = Product(
-            title=item['TanimRU'].strip(),
-            description=item['description'],
-            price=item['price'],
-            image_path=None,
-            quantity=product_process_quantity(item['quantity']),
-            article=item['Artikel'].strip(),
-            code=item['Kod'].strip(),
-            unit=item['Birim'].strip(),
-            category_id=kategori_c.id,
-        )
-        db.add(product)
+        product = db.query(Product).filter(Product.article == item['Artikel'].strip()).first()
+
+        if product:
+            product.title = item['TanimRU'].strip()
+            product.description = item['description']
+            product.price = item['price']
+            product.quantity = product_process_quantity(item['quantity'])
+            product.code = item['Kod'].strip()
+            product.unit = item['Birim'].strip()
+            product.category_id = kategori_c.id
+        else:
+            product = Product(
+                title=item['TanimRU'].strip(),
+                description=item['description'],
+                price=item['price'],
+                image_path=None,
+                quantity=product_process_quantity(item['quantity']),
+                article=item['Artikel'].strip(),
+                code=item['Kod'].strip(),
+                unit=item['Birim'].strip(),
+                category_id=kategori_c.id,
+            )
+            db.add(product)
