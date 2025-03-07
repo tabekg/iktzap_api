@@ -1,5 +1,6 @@
 import json
 
+from controllers.product import product_process_quantity
 from models.category import Category
 from models.product import Product
 from utils import SessionLocal
@@ -16,14 +17,14 @@ def create_category(title: str, parent=None):
     return category
 
 
-def process_quantity(miktar):
-    if not miktar or miktar == '0.000':
-        return 0
-
-    try:
-        return int(miktar.replace(',', ''))
-    except ValueError:
-        return 0
+# def process_quantity(miktar):
+#     if not miktar or miktar == '0.000':
+#         return 0
+#
+#     try:
+#         return int(miktar.replace(',', ''))
+#     except ValueError:
+#         return 0
 
 
 def save_data(data):
@@ -37,7 +38,8 @@ def save_data(data):
             description=None,
             price=None,
             image_path=None,
-            quantity=process_quantity(item['Miktar']),
+            # quantity=process_quantity(item['Miktar']),
+            quantity=product_process_quantity(item['quantity']),
             article=item['Artikel'].strip(),
             code=item['Kod'].strip(),
             unit=item['Birim'].strip(),
@@ -50,8 +52,8 @@ def save_data(data):
 
 if __name__ == '__main__':
     with open('./data.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    print(f"Загружено {len(data)} продуктов.")
-    save_data(data)
+        data_ = json.load(file)
+    print(f"Загружено {len(data_)} продуктов.")
+    save_data(data_)
 
     db.close()

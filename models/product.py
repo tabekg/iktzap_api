@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, Text, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, Text, String, ForeignKey
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy_json import mutable_json_type
 
 from utils.database import Base
 
@@ -10,7 +12,7 @@ class Product(Base):
     description = Column(Text, nullable=True)
     price = Column(Integer, nullable=True)
     image_path = Column(String(255), nullable=True)
-    quantity = Column(Integer, nullable=False, default='0', server_default='0')
+    quantity = Column(mutable_json_type(dbtype=JSONB, nested=True), nullable=False, default={}, server_default='{}')
     article = Column(String(255), nullable=True)
     code = Column(String(255), nullable=True)
     unit = Column(String(55), nullable=True)

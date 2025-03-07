@@ -11,28 +11,26 @@ def create_category(db, title: str, parent=None):
     return category
 
 
-def product_process_quantity(miktar):
-    if not miktar or miktar == '0.000':
-        return 0
-
-    try:
-        return int(miktar.replace(',', ''))
-    except ValueError:
-        return 0
+def product_process_quantity(q):
+    return {
+        'chita': q.get('chita', 0),
+        'kultuma': q.get('kultuma', 0),
+        'ozerny': q.get('ozerny', 0),
+    }
 
 
 def import_json(db, data):
     for item in data:
-        kategori_a = create_category(item['KategoriA'])
-        kategori_b = create_category(item['KategoriB'], parent=kategori_a)
-        kategori_c = create_category(item['KategoriC'], parent=kategori_b)
+        kategori_a = create_category(db, item['KategoriA'])
+        kategori_b = create_category(db, item['KategoriB'], parent=kategori_a)
+        kategori_c = create_category(db, item['KategoriC'], parent=kategori_b)
 
         product = Product(
             title=item['TanimRU'].strip(),
-            description=None,
-            price=None,
+            description=item['description'],
+            price=item['price'],
             image_path=None,
-            quantity=product_process_quantity(item['Miktar']),
+            quantity=product_process_quantity(item['quantity']),
             article=item['Artikel'].strip(),
             code=item['Kod'].strip(),
             unit=item['Birim'].strip(),

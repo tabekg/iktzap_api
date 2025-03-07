@@ -3,7 +3,7 @@ import json
 from flask import Blueprint, g, request
 
 from controllers.auth import auth_required
-from controllers.product import import_json
+from controllers.product import import_json, product_process_quantity
 from models.category import Category
 from models.product import Product
 from models.user import UserRoleEnum
@@ -74,7 +74,7 @@ def index_post():
     article = form.get('article')
 
     category = g.db.query(Category).filter(Category.id == category_id).one()
-    assert quantity >= 0
+    # assert quantity >= 0
 
     image_path = None
 
@@ -92,7 +92,7 @@ def index_post():
         description=description,
         price=price,
         image_path=image_path or None,
-        quantity=quantity,
+        quantity=product_process_quantity(quantity),
         category_id=category.id,
         article=article,
     )
