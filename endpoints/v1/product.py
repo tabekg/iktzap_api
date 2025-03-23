@@ -3,7 +3,7 @@ import json
 from flask import Blueprint, g, request
 
 from controllers.auth import auth_required
-from controllers.product import import_json, product_process_quantity
+from controllers.product import import_json, product_process_quantity, import_json_2
 from models.category import Category
 from models.product import Product
 from models.user import UserRoleEnum
@@ -121,6 +121,24 @@ def import_post():
     products = form['products']
 
     import_json(g.db, products)
+
+    g.db.commit()
+
+    return make_response(
+        payload=None,
+        status_code=201,
+    )
+
+
+@bp.post('/import-2')
+@auth_required(UserRoleEnum.super_admin)
+def import_2_post():
+    form = json.loads(request.form['_json'])
+    files = request.files
+
+    products = form['products']
+
+    import_json_2(g.db, products, files)
 
     g.db.commit()
 
